@@ -23,7 +23,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
     let users = getUsers();
     if(!req.body.id) return res.send('Please provide user id');
-    if(users.find(user => user.id === req.body.id)) res.send('this user already exists');
+    if(users.find(user => user.id === req.body.id)) return res.send('this user already exists');
     const newMovie = {credit: 0, cash: 0, ...req.body};
     users.push(newMovie);
     fs.writeFileSync(dataPath, JSON.stringify(users));
