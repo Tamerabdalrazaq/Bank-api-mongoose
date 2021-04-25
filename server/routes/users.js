@@ -40,14 +40,10 @@ router.put('/:id', (req, res) => {
     handleAction(req.params.id, req.query, req.body, res)
 })
 
-router.delete('/:id', (req, res) => {
-    let movies = getUsers();
-    console.log(movies);
-    const searched = movies.findIndex(movie => movie.id === req.params.id);
-    if(searched < 0) return res.status(400).json({Error: `Cannot find ${req.params.id}`});
-    movies.splice(searched, 1);
-    fs.writeFileSync(dataPath, JSON.stringify(movies));
-    res.json(movies);
+router.delete('/:id', async(req, res) => {
+    const deleted = await User.findByIdAndDelete(req.params.id);
+    if(!deleted) return res.send('not found')
+    res.send(deleted);
 })
 
 module.exports = router;

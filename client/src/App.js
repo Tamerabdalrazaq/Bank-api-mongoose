@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
+import UserComponent from './components/UserComponent'
 import './App.css';
 
 function App() {
@@ -11,7 +12,7 @@ function App() {
 	}
   return (
     <div className="App">
-		{data.map((user, id) => <h1 key={id}>{`${user._id} - Cash: ${user.cash} - Credit: ${user.credit}`}</h1>)}
+		{data.map((user, id) => <UserComponent user={user} update={getUsers}/> )}
 		<button onClick={() => getUsers()}>Get Users</button>
     </div>
   );
