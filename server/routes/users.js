@@ -3,31 +3,31 @@ const fs = require('fs');
 const path = require('path')
 const {getUsers, handleAction} = require('./routesUtils');
 const router = express.Router();
+const User = require('../data/models')
 
 const dataPath = path.join(__dirname, '../data/users.json')
 
 // Get all users
-router.get('/', (req, res) => {
-    res.json(getUsers());
+router.get('/', async (req, res) => {
+    const users = await User.find({})
+    res.json(users);
 })
 
 // Get user by id
-router.get('/:id', (req, res) => {
-    let movies = getUsers();
-    const searched = movies.find(movie => movie.id === req.params.id);
-    if(!searched) return res.status(400).json({Error: `Cannot find ${req.params.id}`})
+router.get('/:id', async (req, res) => {
+    const searched = await User.find({_id: req.params.id});
     res.json(searched);
 })
 
 // Create user
-router.post('/', (req, res) => {
-    let users = getUsers();
-    if(!req.body.id) return res.send('Please provide user id');
-    if(users.find(user => user.id === req.body.id)) return res.send('this user already exists');
-    const newMovie = {credit: 0, cash: 0, ...req.body};
-    users.push(newMovie);
-    fs.writeFileSync(dataPath, JSON.stringify(users));
-    res.json(users);
+router.post('/', async(req, res) => {
+    const user = new User(req.body);
+    try{
+        const response =await user.save();
+        res.send(response)
+    } catch(err){
+        console.log(err);
+    }
 })
 
 // Update user by id

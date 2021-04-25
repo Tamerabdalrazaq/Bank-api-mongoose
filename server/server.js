@@ -1,5 +1,6 @@
 const express = require('express');
 var cors = require('cors');
+require('./data/mongoose')
 
 const app = express();
 
